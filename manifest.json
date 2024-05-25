@@ -1,26 +1,23 @@
+
 {
     "manifest_version": 3,
-    "name": "Black Overlay",
-    "description": "Add a black overlay over your webpages for when you cannot reduce brightness.",
+    "name": "Meine Erweiterung",
     "version": "1.0",
+    "description": "Das ist erstmal ein Test ob und wie das funktioniert",
+    "permissions": [
+      "activeTab",
+      "storage"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
     "action": {
       "default_popup": "popup.html"
     },
-  
-  
-    "permissions":["scripting", "tabs"],
-  
-  
-    "host_permissions": ["<all_urls>"],
-  
-  
-    "content_scripts": [
-      {
-        "js": ["content.js"],
-  
-        "css": ["contentScript.css"],
-  
-        "matches": ["<all_urls>"]
-      }
-    ]
+    "icons": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
   }
+  
