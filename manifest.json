@@ -1,23 +1,31 @@
-
 {
     "manifest_version": 3,
-    "name": "Meine Erweiterung",
+    "name": "Random Number Generator",
     "version": "1.0",
-    "description": "Das ist erstmal ein Test ob und wie das funktioniert",
+    "description": "A simple Chrome extension that shows a random number.",
+    "action": {
+        "default_popup": "popup/popup.html",
+        "default_icon": {
+            "16": "popup/website.png"
+        }
+    },
     "permissions": [
-      "activeTab",
-      "storage"
+        "activeTab",
+        "storage"
     ],
     "background": {
-      "service_worker": "background.js"
+        "scripts": [
+            "background.js"
+        ]
     },
-    "action": {
-      "default_popup": "popup.html"
-    },
-    "icons": {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
-    }
-  }
-  
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "CanvasOverlay/content.js"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+body {
+  width: 300px;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#popup-canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+#emotion-display {
+  font-size: 14px;
+}
