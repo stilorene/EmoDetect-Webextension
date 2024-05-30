@@ -1,23 +1,8 @@
-// Warte, bis die Erweiterung vollständig geladen ist
-window.addEventListener('DOMContentLoaded', () => {
-  // Überprüfe, ob das Hauptskript verfügbar ist
-  if (browser.runtime.connect) {
-    initPopup();
-  } else {
-    window.addEventListener('addon-ready', initPopup);
-  }
+document.addEventListener('DOMContentLoaded', function() {
+  var button = document.getElementById('myButton');
+  var messageDiv = document.getElementById('message');
+
+  button.addEventListener('click', function() {
+      messageDiv.textContent = 'Button wurde geklickt!';
+  });
 });
-
-function initPopup() {
-  // Dein Code zum Initialisieren des Popups
-  // z.B. Nachrichten-Listener hinzufügen
-  browser.runtime.onMessage.addListener(handleMessage);
-}
-
-function handleMessage(message) {
-  // Verarbeite Nachrichten vom Hauptskript hier
-  if (message.ready) {
-    // Das Hauptskript ist bereit, du kannst jetzt Aktionen ausführen
-    // ...
-  }
-}
