@@ -1,13 +1,21 @@
 {
-    "manifest_version": 3,
-    "name": "Simple Popup Example",
-    "version": "1.0",
-    "description": "A simple Chrome extension that shows a message when a button is clicked.",
-    "action": {
-      "default_popup": "popup/popup.html"
-    },
-    "permissions": [
-      "activeTab"
-    ]
+  "manifest_version": 3,
+  "name": "Image Downloader and Analyzer",
+  "version": "1.0",
+  "permissions": [
+    "activeTab",
+    "downloads",
+    "scripting",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "popup/website.png"
+      
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
   }
-  
+}
