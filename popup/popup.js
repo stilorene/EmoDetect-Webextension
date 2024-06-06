@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         chrome.scripting.executeScript({
           target: { tabId: tabs[0].id },
-          function: downloadImage
+          func: downloadAndAnalyzeImage
         });
       });
     });
@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-function downloadImage() {
+function downloadAndAnalyzeImage() {
   const images = document.getElementsByTagName('img');
-  if (images.length > 0) {                      // Überprüfen ob ein Bild vorhanden ist
-    const imageUrl = images[0].src;                 //Das erste wird dabei runtergeladen
-    chrome.runtime.sendMessage({ url: imageUrl }); //message wird an das background.js gesendet, der auf diese Nachricht irgendwie ständig wartet
+  if (images.length > 0) {
+    const imageUrl = images[0].src; // Get the URL of the first image on the page
+    chrome.runtime.sendMessage({ url: imageUrl }); // Send message to background.js
   } else {
     alert('No images found on this page.');
   }

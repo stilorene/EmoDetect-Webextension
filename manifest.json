@@ -6,6 +6,8 @@
     "activeTab",
     "downloads",
     "scripting",
+    "downloads.open",
+    "downloads.shelf",
     "storage"
   ],
   "action": {
