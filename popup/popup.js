@@ -1,25 +1,35 @@
+
 document.addEventListener('DOMContentLoaded', () => {
   const downloadButton = document.getElementById('downloadImage');
+
   if (downloadButton) {
     downloadButton.addEventListener('click', () => {
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        chrome.scripting.executeScript({
-          target: { tabId: tabs[0].id },
-          func: downloadAndAnalyzeImage
+      const numberInput = document.getElementById('number').value;
+      const numberValue = parseInt(numberInput, 10);
+
+      if (!isNaN(numberValue) && numberValue > 0) {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          chrome.scripting.executeScript({
+            target: { tabId: tabs[0].id },
+            func: downloadAndAnalyzeImage,
+            args: [numberValue]
+          });
         });
-      });
+      } else {
+        console.error('Invalid input or number <= 0.');
+      }
     });
   } else {
     console.error('Download button not found.');
   }
 });
 
-function downloadAndAnalyzeImage() {
+function downloadAndAnalyzeImage(maxImages) {
   const images = document.getElementsByTagName('img');
-  if (images.length > 0) {
-    const imageUrl = images[0].src; // Get the URL of the first image on the page
-    chrome.runtime.sendMessage({ url: imageUrl }); // Send message to background.js
+  if (images.length >= maxImages) {
+    const imageUrls = Array.from(images).slice(0, maxImages).map(img => img.src);
+    chrome.runtime.sendMessage({ urls: imageUrls });
   } else {
-    alert('No images found on this page.');
+    console.error(`Less than ${maxImages} images found on this page.`);
   }
 }

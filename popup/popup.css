@@ -4,6 +4,14 @@ body {
   margin: 0;
   padding: 10px;
   box-sizing: border-box;
+  background-color: beige; /* Hintergrundfarbe des gesamten Popups */
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: beige; /* Optional, falls du nur den Inhalt ändern möchtest */
 }
 
 #popup-canvas {
@@ -11,8 +19,5 @@ body {
   height: auto;
   display: block;
   margin-bottom: 10px;
-}
-
-#emotion-display {
-  font-size: 14px;
+  background-color: beige; /* Hintergrundfarbe des Canvas-Elements */
 }
