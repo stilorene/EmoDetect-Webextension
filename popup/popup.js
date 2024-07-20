@@ -33,3 +33,49 @@ function downloadAndAnalyzeImage(maxImages) {
     console.error(`Less than ${maxImages} images found on this page.`);
   }
 }
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const replaceButton = document.getElementById('replaceButton');
+  const originalWordInput = document.getElementById('originalWord');
+  const newWordInput = document.getElementById('newWord');
+
+  // Lade gespeicherte Werte beim Öffnen des Popups
+  chrome.storage.sync.get(['originalWord', 'newWord'], (data) => {
+    if (data.originalWord) {
+      originalWordInput.value = data.originalWord;
+    }
+    if (data.newWord) {
+      newWordInput.value = data.newWord;
+    }
+  });
+
+  replaceButton.addEventListener('click', () => {
+    const originalWord = document.getElementById('originalWord').value;
+    const newWord = document.getElementById('newWord').value;
+
+    if (originalWord && newWord) {
+      chrome.storage.sync.set({ originalWord, newWord }, () => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          chrome.scripting.executeScript({
+            target: { tabId: tabs[0].id },
+            func: replaceWords,
+            args: [originalWord, newWord]
+          });
+        });
+      });
+    } else {
+      alert('Please fill in both fields.');
+    }
+  });
+});
+
+function replaceWords(originalWord, newWord) {
+  const regex = new RegExp(originalWord, 'gi');
+  document.body.innerHTML = document.body.innerHTML.replace(regex, newWord);
+}

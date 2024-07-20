@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Image Downloader and Analyzer",
+  "name": "Image Downloader and Word Replacer",
   "version": "1.0",
   "permissions": [
     "activeTab",
@@ -14,10 +14,19 @@
     "default_popup": "popup/popup.html",
     "default_icon": {
       "16": "popup/website.png"
-      
     }
   },
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "popup/content.js"
+      ]
+    }
+  ]
 }
