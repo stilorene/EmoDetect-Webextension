@@ -1,53 +1,45 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.urls && Array.isArray(message.urls)) {
-    // Änderung: Schleife über die URLs
-    message.urls.forEach((url, index) => {
-      chrome.downloads.download({
-        url: url,
-        filename: `downloaded_image_${index + 1}.jpg` // Änderung: Verwendung von index für eindeutige Dateinamen
-      }, (downloadId) => {
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError);
-        } else {
-          analyzeImage(downloadId);
-        }
-      });
-    });
-  }
+let startTime = 0;
+let pauseTime = 0;
+let timerRunning = false;
+
+chrome.storage.local.get(['startTime', 'pauseTime', 'timerRunning'], function(result) {
+  startTime = parseInt(result.startTime || Date.now());
+  pauseTime = parseInt(result.pauseTime || 0);
+  timerRunning = result.timerRunning === true;
+  updateTime();
 });
 
-async function analyzeImage(downloadId) {
-  console.log('Image downloaded with ID:', downloadId);
-
-  // Änderung: Bedingung zum Prüfen der Ergebnisse
-  chrome.downloads.search({ id: downloadId }, async (results) => {
-    if (results && results.length > 0) { // Änderung: Prüfen, ob Ergebnisse vorhanden sind
-      const fileUrl = results[0].url; // Änderung: Verwendung des ersten Ergebnisses
-
-      // Fetch the image as a Blob
-      const response = await fetch(fileUrl);
-      const imageBlob = await response.blob();
-
-      // Convert the Blob to a Base64 data URL
-      const reader = new FileReader();
-      reader.readAsDataURL(imageBlob);
-
-      reader.onloadend = async () => {
-        const imageUrl = reader.result;
-
-        // Execute content script to use face-api.js for face detection and recognition
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          chrome.scripting.executeScript({
-            target: { tabId: tabs[0].id },
-            func: analyzeImageOnPage,
-            args: [imageUrl]
-          });
-        });
-      };
-    } else {
-      console.error('Download not found');
-    }
-  });
+function updateTime() {
+  if (!timerRunning) return;
+  const currentTime = Date.now();
+  const elapsed = currentTime - startTime;
+  const hours = Math.floor(elapsed / 3600000);
+  const minutes = Math.floor((elapsed % 3600000) / 60000);
+  const seconds = Math.floor((elapsed % 60000) / 1000);
+  let displayText = '';
+  if (hours > 0) {
+    displayText = `${hours}h ${minutes}`;
+  } else if (minutes > 0) {
+    displayText = `${minutes}m`;
+  } else {
+    displayText = `${seconds}s`;
+  }
+  
+  chrome.action.setBadgeText({ text: displayText });
+  chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+  chrome.action.setBadgeBackgroundColor({ color: '#000000' });
 }
 
+setInterval(updateTime, 1000);
 
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+  for (let key in changes) {
+    if (key === 'timerRunning') {
+      timerRunning = changes[key].newValue === true;
+    } else if (key === 'startTime') {
+      startTime = parseInt(changes[key].newValue);
+    } else if (key === 'pauseTime') {
+      pauseTime = parseInt(changes[key].newValue);
+    }
+  }
+});

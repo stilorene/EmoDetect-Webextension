@@ -1,81 +1,93 @@
+document.addEventListener('DOMContentLoaded', function () {
+  let startTime, pauseTime, timerRunning;
+  const inactivityLimit = 1 * 60 * 1000; // 1 Minute in Millisekunden
+  let lastActivityTime = Date.now();
 
-document.addEventListener('DOMContentLoaded', () => {
-  const downloadButton = document.getElementById('downloadImage');
+  // Laden der gespeicherten Daten
+  chrome.storage.local.get(['startTime', 'pauseTime', 'timerRunning'], function(result) {
+    startTime = parseInt(result.startTime || Date.now());
+    pauseTime = parseInt(result.pauseTime || 0);
+    timerRunning = result.timerRunning === true;
 
-  if (downloadButton) {
-    downloadButton.addEventListener('click', () => {
-      const numberInput = document.getElementById('number').value;
-      const numberValue = parseInt(numberInput, 10);
-
-      if (!isNaN(numberValue) && numberValue > 0) {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          chrome.scripting.executeScript({
-            target: { tabId: tabs[0].id },
-            func: downloadAndAnalyzeImage,
-            args: [numberValue]
-          });
-        });
-      } else {
-        console.error('Invalid input or number <= 0.');
-      }
-    });
-  } else {
-    console.error('Download button not found.');
-  }
-});
-
-function downloadAndAnalyzeImage(maxImages) {
-  const images = document.getElementsByTagName('img');
-  if (images.length >= maxImages) {
-    const imageUrls = Array.from(images).slice(0, maxImages).map(img => img.src);
-    chrome.runtime.sendMessage({ urls: imageUrls });
-  } else {
-    console.error(`Less than ${maxImages} images found on this page.`);
-  }
-}
-
-
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const replaceButton = document.getElementById('replaceButton');
-  const originalWordInput = document.getElementById('originalWord');
-  const newWordInput = document.getElementById('newWord');
-
-  // Lade gespeicherte Werte beim Öffnen des Popups
-  chrome.storage.sync.get(['originalWord', 'newWord'], (data) => {
-    if (data.originalWord) {
-      originalWordInput.value = data.originalWord;
+    if (timerRunning) {
+      startTimer();
     }
-    if (data.newWord) {
-      newWordInput.value = data.newWord;
-    }
+    updateTime();
   });
 
-  replaceButton.addEventListener('click', () => {
-    const originalWord = document.getElementById('originalWord').value;
-    const newWord = document.getElementById('newWord').value;
+  function resetInactivityTimer() {
+    lastActivityTime = Date.now();
+    if (!timerRunning) {
+      startTimer();
+    }
+  }
 
-    if (originalWord && newWord) {
-      chrome.storage.sync.set({ originalWord, newWord }, () => {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          chrome.scripting.executeScript({
-            target: { tabId: tabs[0].id },
-            func: replaceWords,
-            args: [originalWord, newWord]
-          });
-        });
+  function checkInactivity() {
+    if (Date.now() - lastActivityTime >= inactivityLimit) {
+      pauseTimer();
+    }
+  }
+
+  function startTimer() {
+    if (!timerRunning) {
+      startTime = Date.now() - (pauseTime || 0);
+      timerRunning = true;
+      chrome.storage.local.set({
+        startTime: startTime,
+        timerRunning: true,
+        pauseTime: null
       });
-    } else {
-      alert('Please fill in both fields.');
     }
-  });
+  }
+
+  function pauseTimer() {
+    if (timerRunning) {
+      pauseTime = Date.now() - startTime;
+      timerRunning = false;
+      chrome.storage.local.set({
+        pauseTime: pauseTime,
+        timerRunning: false
+      });
+    }
+  }
+
+  function updateTime() {
+    if (!timerRunning) return;
+    const elapsed = Date.now() - startTime;
+    const hours = Math.floor(elapsed / 3600000);
+    const minutes = Math.floor((elapsed % 3600000) / 60000);
+    const seconds = Math.floor((elapsed % 60000) / 1000);
+    document.getElementById('time').textContent =
+      `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  document.addEventListener('mousemove', resetInactivityTimer);
+  document.addEventListener('keydown', resetInactivityTimer);
+  document.addEventListener('click', resetInactivityTimer);
+
+  setInterval(updateTime, 1000);
+  setInterval(checkInactivity, 1000);
+
+  // Rest des Codes (Notizbereich usw.) bleibt unverändert
+  // Stellen Sie sicher, dass Sie auch hier localStorage durch chrome.storage.local ersetzen
 });
 
-function replaceWords(originalWord, newWord) {
-  const regex = new RegExp(originalWord, 'gi');
-  document.body.innerHTML = document.body.innerHTML.replace(regex, newWord);
+// Beispiel für den Notizbereich
+const noteElement = document.getElementById('note');
+
+chrome.storage.local.get('note', function(result) {
+  if (result.note) {
+    noteElement.value = result.note;
+    autoResizeTextArea(noteElement);
+  }
+});
+
+noteElement.addEventListener('input', function () {
+  chrome.storage.local.set({note: noteElement.value});
+  autoResizeTextArea(noteElement);
+});
+
+function autoResizeTextArea(element) {
+  element.style.height = 'auto';
+  element.style.height = `${element.scrollHeight}px`;
 }

@@ -1,32 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "Image Downloader and Word Replacer",
-  "version": "1.0",
-  "permissions": [
-    "activeTab",
-    "downloads",
-    "scripting",
-    "downloads.open",
-    "downloads.shelf",
-    "storage"
-  ],
-  "action": {
-    "default_popup": "popup/popup.html",
-    "default_icon": {
-      "16": "popup/website.png"
-    }
-  },
+  "name": "Productivity Timer",
+  "version": "1.5",
+  "description": "A simple productivity timer with note-taking feature.",
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "popup/content.js"
-      ]
-    }
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": "popup/website.png"
+  },
+  "permissions": [
+    "storage"
   ]
 }

@@ -9,18 +9,21 @@
 </head>
 
 <body>
-  <h3>Website-Picture Download</h3>
-  <br><label for="zahl">Bilderanzahl zum download eingeben:</label></br>
-  <input type="number" id="number" name="Just Numbers">
-  <button id="downloadImage">Download Pictures</button>
+  <div id="header">
+    <h3>Browsertime spent</h3>
+  </div>
+  <div id="timer">
+    <span id="time">00:00:00</span>
+  </div>
+  <div id="notes">
+    <textarea id="note" placeholder="Write your notes here..."></textarea>
+  </div>
+  <div>
+    <input type="text" id="notice" placeholder="Notice here"></br>
+    <button id="safenotes">Safe it</button>
+  </div>
   <script src="popup.js"></script>
 
-  <h3>Word Replacer</h3>
-  <label for="originalWord">Original Word:</label>
-  <input type="text" id="originalWord" placeholder="Original Word"></br>
-  <label for="newWord">New Word:</label>
-  <input type="text" id="newWord" placeholder="New Word">
-  <button id="replaceButton">Replace</button>
 </body>
 
 </html>

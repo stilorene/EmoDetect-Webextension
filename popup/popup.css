@@ -1,23 +1,45 @@
 body {
-  width: 300px;
+  width: 300px; /* Gesamtbreite des Popups */
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 10px;
-  box-sizing: border-box;
-  background-color: beige; /* Hintergrundfarbe des gesamten Popups */
-}
-
-#content {
+  box-sizing: border-box; /* Box-Sizing auf Border-Box setzen */
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: beige; /* Optional, falls du nur den Inhalt ändern möchtest */
 }
 
-#popup-canvas {
-  max-width: 100%;
-  height: auto;
-  display: block;
+#header {
+  text-align: center;
   margin-bottom: 10px;
-  background-color: beige; /* Hintergrundfarbe des Canvas-Elements */
+}
+
+#timer {
+  font-size: 30px; /* Vergrößerte Schriftgröße für den Timer */
+  font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+  letter-spacing: 4px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+
+
+#notes {
+  margin-top: 10px;
+  width: 100%; /* Container auf volle Breite setzen */
+  display: flex;
+  flex-direction: column; /* Flexbox-Anordnung für dynamische Größe */
+}
+
+#note {
+  width: 100%;
+  max-width: 100%; /* Maximale Breite auf die Containerbreite begrenzen */
+  min-height: 30px; /* Minimale Höhe für das Notizfeld */
+  padding: 5px;
+  box-sizing: border-box; /* Box-Sizing auf Border-Box setzen */
+  overflow: hidden; /* Verhindert Scrollbalken */
+  resize: none; /* Deaktiviert das manuelle Resizing */
+  height: auto; /* Höhe automatisch anpassen */
+  max-height: 100%; /* Keine feste maximale Höhe, um flexibel zu bleiben */
 }
