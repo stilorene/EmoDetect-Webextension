@@ -38,8 +38,6 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
       timerRunning = changes[key].newValue === true;
     } else if (key === 'startTime') {
       startTime = parseInt(changes[key].newValue);
-    } else if (key === 'pauseTime') {
-      pauseTime = parseInt(changes[key].newValue);
-    }
+    } 
   }
 });
