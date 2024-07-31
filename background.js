@@ -2,9 +2,8 @@ let startTime = 0;
 let pauseTime = 0;
 let timerRunning = false;
 
-chrome.storage.local.get(['startTime', 'pauseTime', 'timerRunning'], function(result) {
+chrome.storage.local.get(['startTime','timerRunning'], function(result) {
   startTime = parseInt(result.startTime || Date.now());
-  pauseTime = parseInt(result.pauseTime || 0);
   timerRunning = result.timerRunning === true;
   updateTime();
 });
@@ -27,7 +26,7 @@ function updateTime() {
   
   chrome.action.setBadgeText({ text: displayText });
   chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-  chrome.action.setBadgeBackgroundColor({ color: '#000000' });
+  chrome.action.setBadgeBackgroundColor({ color: 'black' });
 }
 
 setInterval(updateTime, 1000);

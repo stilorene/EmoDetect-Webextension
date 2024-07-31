@@ -1,16 +1,21 @@
 {
   "manifest_version": 3,
-  "name": "Productivity Timer",
-  "version": "1.5",
-  "description": "A simple productivity timer with note-taking feature.",
+  "name": "Productivity Tool",
+  "version": "1.6",
+  "description": "Simply make your time valuable.",
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_popup": "popup/popup.html",
-    "default_icon": "popup/website.png"
+    "default_icon": "popup/chat-pfeil-wachsen.png"
   },
   "permissions": [
     "storage"
-  ]
+  ],
+
+  "content_security_policy": {
+    "script-src": "self",
+    "object-src": "self"
+  }
 }

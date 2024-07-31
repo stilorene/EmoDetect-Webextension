@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Helpfull-Extension</title>
   <link rel="stylesheet" type="text/css" href="popup.css">
+  <script src="popup.js"></script>
+
+
+
 </head>
 
 <body>
@@ -15,12 +19,23 @@
   <div id="timer">
     <span id="time">00:00:00</span>
   </div>
-  <div id="notes">
-    <textarea id="note" placeholder="Write your notes here..."></textarea>
+  <div class="container">
+    <button id="pausebutton">Pause</button>
+    <button id="playbutton">Play</button>
+    <button id="resetbutton">Reset</button>
   </div>
-  <div>
-    <input type="text" id="notice" placeholder="Notice here"></br>
-    <button id="safenotes">Safe it</button>
+  <div id="goals">
+    <h3>Set Goals</h3>
+    <input type="text" id="goalInput" placeholder="Set your goal...">
+    <button id="setGoalButton">Set Goal</button>
+    <div id="goalList"></div>
+  </div>
+  <div id="external-link">
+    <a href="http://localhost:8000" target="_blank">View Charts</a>
+  </div>
+
+  <input type="text" id="notice" placeholder="Notice here"></br>
+  <button id="safenotes">Safe it</button>
   </div>
   <script src="popup.js"></script>
 
