@@ -70,6 +70,19 @@ function startTimer() {
   }
 }
 
+document.getElementById("resetbutton").addEventListener('click', resetTimer);
+function resetTimer() {
+  
+    startTime = Date.now(); 
+    // timerRunning = true;
+    chrome.storage.local.set({
+      startTime: startTime,
+      timerRunning: true,
+      pauseTime: 0
+    });
+  
+}
+
   setInterval(updateTime, 1000);
   
 

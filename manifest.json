@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Productivity Tool",
+  "name": "Productivity Tool (with little extra)",
   "version": "1.6",
-  "description": "Simply make your time valuable.",
+  "description": "Simply make your time valuable and fun.",
   "background": {
     "service_worker": "background.js"
   },
